@@ -3,7 +3,7 @@
 
 ## Assignment Breakdown
 
-__Assignment 1:__ Collecting & visualizing data, SQLite, D3 warmup, OpenRefine
-*Assignment 2:* D3 Graphs and Visualization
-*Assignment 3:* Hadoop, Spark, Pig and Azure
-*Assignment 4:* Scalable PageRank via Virtual Memory (MMap), Random Forest, Scikit-Learn
+__Assignment 1:__ Collecting & visualizing data, SQLite, D3 warmup, OpenRefine  
+*Assignment 2:* D3 Graphs and Visualization  
+*Assignment 3:* Hadoop, Spark, Pig and Azure  
+*Assignment 4:* Scalable PageRank via Virtual Memory (MMap), Random Forest, Scikit-Learn  
