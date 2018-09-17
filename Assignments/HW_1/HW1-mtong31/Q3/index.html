@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>mtong31</title>
+    <script type="text/javascript" src="./d3/d3.v3.min.js"></script>
+    <style type="text/css">
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+    }
+
+    .axis text {
+        font-family: sans-serif;
+        font-size: 11px;
+    }
+
+    </style>
+  </head>
+
+  <body>
+    <script type="text/javascript">
+
+    // creation of 100 random datapoints
+    var dataset = [];
+    var num_of_points = 100; // defined by homework
+    var point_range = [9, 250];
+
+    function random_coordinate(min, max) {
+      return Math.ceil(Math.random() * (max - min)) + min;
+    }
+
+    for (var i=0; i < num_of_points; i++) {
+      var rand_x = random_coordinate(point_range[0], point_range[1]);
+      var rand_y = random_coordinate(point_range[0], point_range[1]);
+      dataset.push([rand_x, rand_y]);
+    }
+    // ########
+
+    // creation of svg area and scale factors
+    var w = 750;
+    var h = 500;
+    var axis_padding = 40;
+    var domain_range = [point_range[0], point_range[1]]
+
+    var scale_points = d3.scale.linear()
+                               .domain(domain_range)
+                               .range([1, 5]);
+
+    var scale_stroke = d3.scale.linear()
+                              .domain(domain_range)
+                              .range([1,1.5]);
+
+    var scale_plot_x = d3.scale.linear()
+                               .domain(domain_range)
+                               .range( [axis_padding, w-axis_padding] );
+
+    var scale_plot_y = d3.scale.linear()
+                                .domain(domain_range)
+                                .range( [axis_padding, h-axis_padding] );
+
+    var scale_axis_x = d3.scale.linear()
+                               .domain(domain_range)
+                               .range( [axis_padding, w - axis_padding] );
+
+    var scale_axis_y = d3.scale.linear()
+                               .domain(domain_range)
+                               .range( [h - axis_padding, axis_padding] );
+
+    var svg = d3.select("body")
+                .append("svg")
+                .attr("width", w)
+                .attr("height", h);
+
+    var xAxis = d3.svg.axis()
+                      .scale(scale_axis_x)
+                      .orient("bottom")
+                      .ticks(10);
+
+    var yAxis = d3.svg.axis()
+                      .scale(scale_axis_y)
+                      .orient("left")
+                      .ticks(10);
+    //##########
+
+    // code below is to adjust the stroke color part: d
+    var sum_width = 0;
+
+    for (var i=0; i < num_of_points; i++) {
+      sum_width += dataset[i][0]
+    }
+
+    var average_width = sum_width/dataset.length
+
+    function stroke_color(x_coord) { // adjusts the stroke value based on the x coordinate
+      if (x_coord < average_width) {
+        return "green";
+      } else {
+        return"blue";
+      }
+    }
+    // #############
+
+    // SVG Creation
+    svg.selectAll("rect")
+       .data(dataset)
+       .enter()
+       .append("rect")
+       .attr("x", function(d) {
+         return scale_plot_x(d[0]) - scale_points(d[0])/2;
+       })
+       .attr("y", function(d) {
+         return h-scale_plot_y(d[1]) - scale_points(d[0])/2; // origin is top left
+       })
+       .attr("width", function(d) {
+         return scale_points(d[0]);
+       })
+       .attr("height", function(d) {
+         return scale_points(d[0]);
+       })
+       .attr("fill", "rgba(0,0,0,0")
+       .attr("stroke", function (d) {
+         return stroke_color(d[0]);
+       })
+       .attr("stroke-width", function(d) {
+         return scale_stroke(d[0])
+       });
+
+    svg.append("g")
+       .attr("class", "axis")
+       .attr("transform", "translate(0," + (h - axis_padding) + ")")
+       .call(xAxis);
+
+    svg.append("g")
+       .attr("class", "axis")
+       .attr("transform", "translate(" + axis_padding  + ", 0)")
+       .call(yAxis);
+
+    svg.append("text")
+       .attr("x", w/2)
+       .attr("y", axis_padding/2)
+       .attr("text-anchor", "middle")
+       .style("fill", "rgba(100,0,0,0.3")
+       .style('stroke', "orange")
+       .attr('stroke-width', "0.2")
+       .style("font-size", axis_padding/2 + "px")
+       .text("mtong31");
+
+    // Create text for min
+    var y_coords = [];
+
+    for (var i=0; i < dataset.length; i++) {
+      y_coords.push(dataset[i][1]);
+    }
+
+    var y_min = d3.min(y_coords);
+
+    svg.append("text")
+       .attr("x", w/2)
+       .attr("y", h - axis_padding - 5)
+       .attr("text-anchor", "middle")
+       .style("fill", "rgba(100,0,0,0.3")
+       .style('stroke', "orange")
+       .attr('stroke-width', "0.2")
+       .style("font-size", axis_padding/2 + "px")
+       .text("Min Y: " + y_min);
+    // #########
+
+    </script>
+  </body>
+</html>
